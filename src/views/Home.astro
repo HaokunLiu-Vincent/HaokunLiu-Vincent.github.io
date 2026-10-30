@@ -1,0 +1,30 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import site from '@/config/site.json';
+import { dictionaries, route } from '@/i18n';
+import type { Locale } from '@/i18n/types';
+import Arrow from '@/components/Arrow.astro';
+import ProjectFeature from '@/components/ProjectFeature.astro';
+import FocusList from '@/components/FocusList.astro';
+import ContactCTA from '@/components/ContactCTA.astro';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = dictionaries[locale];
+---
+<Layout locale={locale} page="home">
+  <section class="hero shell">
+    <p class="eyebrow hero-eyebrow"><span class="blue-dot" aria-hidden="true"></span>{t.home.eyebrow}</p>
+    <h1>{t.home.title[0]}<br /><span class="hero-second-line">{t.home.title[1]}</span></h1>
+    <p class="hero-positioning">{site.positioning[locale]}</p>
+    <p class="hero-intro">{t.home.intro}</p>
+    <div class="hero-actions"><a class="button button-dark" href={route(locale, 'projects')}>{t.common.viewProjects}<Arrow /></a><a class="text-link secondary-link" href={route(locale, 'about')}>{t.common.aboutMe}<Arrow direction="up-right" /></a></div>
+    <div class="hero-footnote"><span class="education-mark" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m2 9 10-5 10 5-10 5L2 9Zm4 2v6c4 3 8 3 12 0v-6M22 9v7" /></svg></span>{t.home.focusLabel}</div>
+    <span class="hero-side-note" aria-hidden="true">ML / AI — 01</span>
+  </section>
+  <section class="section shell" aria-labelledby="featured-title">
+    <div class="section-heading"><div><p class="eyebrow">{t.home.featured}</p><h2 id="featured-title">{t.home.featuredNote}</h2></div><a class="text-link" href={route(locale, 'projects')}>{t.common.allProjects}<Arrow /></a></div>
+    <div class="project-stack">{t.projects.map(project => <ProjectFeature locale={locale} project={project} />)}</div>
+  </section>
+  <section class="section shell approach-section" aria-labelledby="approach-title"><div><p class="eyebrow">{t.home.approach}</p><h2 id="approach-title">{t.home.approachTitle}</h2></div><FocusList items={t.home.focus} /></section>
+  <ContactCTA locale={locale} />
+</Layout>

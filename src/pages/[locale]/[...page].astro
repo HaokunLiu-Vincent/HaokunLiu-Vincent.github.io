@@ -1,0 +1,23 @@
+---
+import { dictionaries, locales, pagePaths } from '@/i18n';
+import type { Locale, Page } from '@/i18n/types';
+import Home from '@/views/Home.astro';
+import Projects from '@/views/Projects.astro';
+import About from '@/views/About.astro';
+import Contact from '@/views/Contact.astro';
+import CaseStudy from '@/views/CaseStudy.astro';
+
+export function getStaticPaths() {
+  return locales.flatMap(locale => Object.entries(pagePaths).map(([page, path]) => ({
+    params: { locale, page: path ? path.replace(/\/$/, '') : undefined },
+    props: { locale, page: page as Page },
+  })));
+}
+interface Props { locale: Locale; page: Page }
+const { locale, page } = Astro.props;
+const project = dictionaries[locale].projects.find(item => item.page === page);
+const views = { home: Home, projects: Projects, about: About, contact: Contact };
+const View = Object.hasOwn(views, page) ? views[page as keyof typeof views] : undefined;
+if (!View && !project) throw new Error('Missing localized page content: ' + page);
+---
+{project ? <CaseStudy locale={locale} project={project} /> : View && <View locale={locale} />}

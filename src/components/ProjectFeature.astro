@@ -1,0 +1,21 @@
+---
+import { dictionaries, route } from '@/i18n';
+import type { Locale, ProjectContent } from '@/i18n/types';
+import Architecture from './Architecture.astro';
+import Arrow from './Arrow.astro';
+interface Props { locale: Locale; project: ProjectContent; headingLevel?: 2 | 3 }
+const { locale, project: p, headingLevel = 3 } = Astro.props;
+const t = dictionaries[locale];
+const Title = headingLevel === 2 ? 'h2' : 'h3';
+---
+<article class="project-feature" data-project={p.id}>
+  <div class="project-copy">
+    <div class="project-meta"><span class="index-number">{p.number}</span><span>{p.category}</span></div>
+    <Title class="project-title"><a href={route(locale, p.page)}>{p.name}</a></Title>
+    <p class="project-summary">{p.summary}</p>
+    <ul class="tag-list" aria-label={p.scopeLabel}>{p.tags.map(tag => <li>{tag}</li>)}</ul>
+    <p class="project-status"><span></span>{p.status}</p>
+    <a class="text-link" href={route(locale, p.page)} aria-label={`${t.common.viewCase}: ${p.name}`}>{t.common.viewCase}<Arrow /></a>
+  </div>
+  <Architecture project={p} compact />
+</article>

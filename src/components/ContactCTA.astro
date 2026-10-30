@@ -1,0 +1,9 @@
+---
+import { dictionaries, route } from '@/i18n';
+import type { Locale } from '@/i18n/types';
+import Arrow from './Arrow.astro';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = dictionaries[locale];
+---
+<section class="contact-cta shell"><div><h2>{t.home.ctaTitle}</h2><p>{t.home.ctaText}</p></div><a class="button button-dark" href={route(locale, 'contact')}>{t.common.contact}<Arrow direction="up-right" /></a></section>

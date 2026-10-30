@@ -1,0 +1,6 @@
+---
+import type { FocusArea } from '@/i18n/types';
+interface Props { items: FocusArea[]; tags?: boolean }
+const { items, tags = false } = Astro.props;
+---
+<div class="focus-list">{items.map((item, i) => <article class="focus-item"><span class="index-number">0{i + 1}</span><div><h3>{item.title}</h3><p>{item.description}</p>{tags && <ul class="tag-list">{item.tags.map(tag => <li>{tag}</li>)}</ul>}</div></article>)}</div>

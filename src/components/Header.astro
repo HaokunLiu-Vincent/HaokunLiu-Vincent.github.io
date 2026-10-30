@@ -1,0 +1,22 @@
+---
+import site from '@/config/site.json';
+import { dictionaries, route } from '@/i18n';
+import type { Locale, Page } from '@/i18n/types';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+interface Props { locale: Locale; page: Page }
+const { locale, page } = Astro.props;
+const t = dictionaries[locale];
+const pages = ['home', 'projects', 'about', 'contact'] as const;
+---
+<header id="top" class="site-header">
+  <div class="shell header-inner">
+    <a class="wordmark" href={route(locale)} aria-label={`${site.name[locale]} · ${t.nav.home}`}>
+      <span class="monogram" aria-hidden="true">{site.initials}<span>.</span></span>
+      <span class="wordmark-name">{site.name[locale]}</span>
+    </a>
+    <nav class="main-nav" aria-label={t.common.mainNav}>
+      {pages.map((key) => <a href={route(locale, key)} aria-current={page === key || (key === 'projects' && (page === 'caseStudy' || page === 'pipelineStudy')) ? 'page' : undefined}>{t.nav[key]}</a>)}
+    </nav>
+    <LanguageSwitcher locale={locale} page={page} />
+  </div>
+</header>

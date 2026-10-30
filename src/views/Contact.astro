@@ -1,0 +1,23 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import site from '@/config/site.json';
+import { dictionaries } from '@/i18n';
+import type { Locale } from '@/i18n/types';
+import PageIntro from '@/components/PageIntro.astro';
+import Arrow from '@/components/Arrow.astro';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = dictionaries[locale];
+function contactHref(key: 'github' | 'linkedin' | 'email'): string | null {
+  const value = site.links[key] as string | null;
+  return value ? (key === 'email' ? `mailto:${value}` : value) : null;
+}
+---
+<Layout locale={locale} page="contact">
+  <PageIntro eyebrow={t.contact.eyebrow} title={t.contact.title} intro={t.contact.intro} />
+  <section class="shell contact-content" aria-label={t.contact.eyebrow}>
+    <p class="eyebrow contact-availability"><span class="blue-dot" aria-hidden="true"></span>{t.contact.availability}</p>
+    <div class="contact-links">{t.contact.links.map((link, i) => <article class="contact-row"><span class="index-number">0{i + 1}</span><div><h2>{link.title}</h2><p>{link.description}</p></div>{contactHref(link.key) ? <a class="text-link contact-destination" href={contactHref(link.key)!} rel={link.key !== 'email' ? 'me' : undefined}><span>{site.links[link.key]}</span><Arrow direction="up-right" /></a> : <span class="contact-placeholder">{link.placeholder}</span>}</article>)}</div>
+    {t.contact.links.some(link => !contactHref(link.key)) && <p class="small-note contact-note">{t.contact.note}</p>}
+  </section>
+</Layout>

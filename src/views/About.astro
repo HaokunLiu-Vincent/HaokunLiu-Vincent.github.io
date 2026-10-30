@@ -1,0 +1,21 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { dictionaries } from '@/i18n';
+import type { Locale } from '@/i18n/types';
+import PageIntro from '@/components/PageIntro.astro';
+import FocusList from '@/components/FocusList.astro';
+import ContactCTA from '@/components/ContactCTA.astro';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = dictionaries[locale];
+---
+<Layout locale={locale} page="about">
+  <PageIntro eyebrow={t.about.eyebrow} title={t.about.title} intro={t.about.intro} />
+  <div class="shell about-content">
+    <section class="editorial-row"><h2 class="section-label">{t.about.education}</h2><div class="education-list">{t.about.educationItems.map(entry => <article class="education-entry"><h3 class="large-subtitle">{entry.degree}</h3>{entry.specialization && <p class="education-specialization">{entry.specialization}</p>}<p class="university">{entry.university}</p><p class="small-note">{entry.location}</p>{entry.status && <p class="small-note education-status">{entry.status}</p>}</article>)}</div></section>
+    <section class="editorial-row"><h2 class="section-label">{t.about.interests}</h2><FocusList items={t.about.interestItems} tags /></section>
+    <section class="editorial-row"><h2 class="section-label">{t.about.experience}</h2><div><h3 class="large-subtitle">{t.about.experienceTitle}</h3><p class="body-copy mt-5">{t.about.experienceText}</p><ul class="placeholder-fields">{t.about.experienceFields.map(field => <li>{field}<span>{t.common.missing}</span></li>)}</ul></div></section>
+    <section class="editorial-row"><h2 class="section-label">{t.about.direction}</h2><div><p class="body-copy">{t.about.directionText}</p><ul class="role-list">{t.about.roles.map(role => <li><span class="blue-dot" aria-hidden="true"></span>{role}</li>)}</ul></div></section>
+  </div>
+  <ContactCTA locale={locale} />
+</Layout>

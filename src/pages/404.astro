@@ -1,0 +1,8 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { en } from '@/i18n/en';
+import { zh } from '@/i18n/zh';
+---
+<Layout locale="en" page="home" noindex title="Page not found" description="This page could not be found. Continue to the portfolio in English or Simplified Chinese.">
+  <section class="shell not-found"><p class="eyebrow">404</p><h1>{en.notFound.title}</h1><p class="lead">{en.notFound.text}</p><p class="lead" lang="zh-CN">{zh.notFound.text}</p><div class="not-found-links"><a class="button button-dark" href="/en/" lang="en">{en.notFound.link} · EN</a><a class="text-link" href="/zh/" lang="zh-CN">{zh.notFound.link} · 中文 →</a></div></section>
+</Layout>

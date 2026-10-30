@@ -1,0 +1,13 @@
+---
+import site from '@/config/site.json';
+import { dictionaries, route } from '@/i18n';
+import type { Locale } from '@/i18n/types';
+import Arrow from './Arrow.astro';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = dictionaries[locale];
+---
+<footer class="site-footer shell">
+  <div class="footer-top"><a class="footer-name" href={route(locale)}>{site.name[locale]}<span class="text-accent" aria-hidden="true">.</span></a><p>{t.common.footerNote}</p><a class="back-top" href="#top" aria-label={t.common.top}><Arrow direction="up-right" /></a></div>
+  <div class="footer-bottom"><p>© {new Date().getUTCFullYear()} {site.name[locale]}</p><p>{t.common.builtWith}</p><nav aria-label={t.common.footerNav}><a href={route(locale, 'projects')}>{t.nav.projects}</a><a href={route(locale, 'contact')}>{t.nav.contact}</a></nav></div>
+</footer>

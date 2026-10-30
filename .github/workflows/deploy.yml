@@ -1,0 +1,59 @@
+name: Deploy to GitHub Pages
+
+# Deployment is deliberate: pushing code only runs verification.
+# Run this workflow manually after reviewing and approving the site.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate root-domain repository
+        env:
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
+        run: |
+          node --input-type=module -e '
+            const expected = `${process.env.REPOSITORY_OWNER}.github.io`.toLowerCase();
+            if (process.env.REPOSITORY_NAME.toLowerCase() !== expected) {
+              throw new Error(`Use the ${expected} repository for this root-domain configuration.`);
+            }
+          '
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/configure-pages@v5
+        id: pages
+      - run: npm ci
+      - name: Check, build, and verify
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+        run: npm run verify
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

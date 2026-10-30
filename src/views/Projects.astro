@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { dictionaries } from '@/i18n';
+import type { Locale } from '@/i18n/types';
+import PageIntro from '@/components/PageIntro.astro';
+import ProjectFeature from '@/components/ProjectFeature.astro';
+import ContactCTA from '@/components/ContactCTA.astro';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = dictionaries[locale];
+---
+<Layout locale={locale} page="projects">
+  <PageIntro eyebrow={t.project.eyebrow} title={t.project.title} intro={t.project.intro} />
+  <section class="shell projects-list" aria-label={t.project.eyebrow}><div class="project-stack">{t.projects.map(project => <ProjectFeature locale={locale} project={project} headingLevel={2} />)}</div><div class="more-work"><span class="index-number" aria-hidden="true">↳</span><div><h2>{t.project.moreTitle}</h2><p>{t.project.moreText}</p></div></div></section>
+  <ContactCTA locale={locale} />
+</Layout>

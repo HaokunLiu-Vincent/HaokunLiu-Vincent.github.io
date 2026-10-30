@@ -1,0 +1,56 @@
+---
+import '@/styles/global.css';
+import site from '@/config/site.json';
+import { absolute, dictionaries, htmlLang, locales, ogLocale, route } from '@/i18n';
+import type { Locale, Page } from '@/i18n/types';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+interface Props { locale: Locale; page: Page; noindex?: boolean; title?: string; description?: string }
+const { locale, page, noindex = false, title, description } = Astro.props;
+const t = dictionaries[locale];
+const pageTitle = `${title || t.seo[page].title} — ${site.name[locale]}`;
+const pageDescription = description || t.seo[page].description;
+const canonical = absolute(Astro.site, route(locale, page));
+const image = absolute(Astro.site, '/og.png');
+---
+<!doctype html>
+<html lang={htmlLang[locale]}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="author" content={site.name[locale]} />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="color-scheme" content="light" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && <>
+      <link rel="canonical" href={canonical} />
+      {locales.map((language) => <link rel="alternate" hreflang={htmlLang[language]} href={absolute(Astro.site, route(language, page))} />)}
+      <link rel="alternate" hreflang="x-default" href={absolute(Astro.site, route('en', page))} />
+    </>}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name[locale]} />
+    <meta property="og:locale" content={ogLocale[locale]} />
+    <meta property="og:locale:alternate" content={ogLocale[locale === 'en' ? 'zh' : 'en']} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.common.socialImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={image} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap.xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.common.skip}</a>
+    <Header locale={locale} page={page} />
+    <main id="main" tabindex="-1"><slot /></main>
+    <Footer locale={locale} />
+  </body>
+</html>

@@ -1,0 +1,11 @@
+---
+import { dictionaries, route } from '@/i18n';
+import type { Locale, Page } from '@/i18n/types';
+interface Props { locale: Locale; page: Page }
+const { locale, page } = Astro.props;
+---
+<nav class="language-switcher" aria-label={dictionaries[locale].common.language}>
+  <a href={route('en', page)} lang="en" hreflang="en" aria-current={locale === 'en' ? 'true' : undefined}>EN</a>
+  <span aria-hidden="true">/</span>
+  <a href={route('zh', page)} lang="zh-CN" hreflang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined}>中文</a>
+</nav>

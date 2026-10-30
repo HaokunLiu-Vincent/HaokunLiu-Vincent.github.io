@@ -1,0 +1,16 @@
+---
+import type { ProjectContent } from '@/i18n/types';
+interface Props { project: ProjectContent; compact?: boolean }
+const { project: p, compact = false } = Astro.props;
+---
+<figure class:list={['architecture', { compact }]} aria-label={p.diagramLabel}>
+  <div class="diagram-topline"><span class="eyebrow">{p.labels.systemDesign}</span><span class="diagram-version">{p.labels.proposed}</span></div>
+  <div class="diagram-endpoint"><span class="endpoint-dot"></span>{p.input}</div>
+  <div class="diagram-connector" aria-hidden="true"></div>
+  <ol class="pipeline">
+    {p.stages.map((stage, i) => <li class:list={['pipeline-stage', { 'stage-accent': i === 1 }]}><span class="stage-number">0{i + 1}</span><strong>{stage.title}</strong><span class="stage-detail">{stage.detail}</span></li>)}
+  </ol>
+  <div class="diagram-connector" aria-hidden="true"></div>
+  <div class="diagram-endpoint endpoint-output"><span class="output-icon" aria-hidden="true"><i></i><i></i><i></i></span>{p.output}</div>
+  {!compact && <figcaption class="diagram-feedback">↳ {p.feedback}</figcaption>}
+</figure>

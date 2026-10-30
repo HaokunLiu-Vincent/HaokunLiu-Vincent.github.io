@@ -1,0 +1,21 @@
+{
+  "url": "https://haokunliu-vincent.github.io",
+  "name": {
+    "en": "Haokun Liu",
+    "zh": "刘昊坤"
+  },
+  "initials": "HL",
+  "links": {
+    "github": "https://github.com/HaokunLiu-Vincent",
+    "linkedin": "https://www.linkedin.com/in/haokun-liu-75396b272/",
+    "email": "vincent241119@gmail.com"
+  },
+  "positioning": {
+    "en": "Machine Learning Engineer | Recommendation Systems | Agentic AI | MLOps",
+    "zh": "机器学习工程师 | 推荐系统 | Agentic AI | MLOps"
+  },
+  "projectRepositories": {
+    "agentic-commerce": null,
+    "recommendation-pipeline": null
+  }
+}
